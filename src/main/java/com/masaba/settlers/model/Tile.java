@@ -4,7 +4,7 @@ import java.util.*;
 public class Tile {
     private int row;
     private int index;
-    private List<Tile> neighbours;
+    private Map<String, Tile> neighbours;
     private Map<String, Edge> edges;
     private Map<String, Vertex> vertices;
     private List<List<Tile>> board;
@@ -19,9 +19,23 @@ public class Tile {
         this.vertices = findOrCreateVertices();
     }
 
-    private List<Tile> findNeighbours() {
-        // To do
-        return new ArrayList<>();
+    private void findNeighbours(Tile[][] board, int row, int index) {
+        Map<String, Tile> neighbours = new HashMap<>();
+
+        if (row > 0 && index > 0)
+            neighbours.put("top_left", board[row - 1][index - 1]);
+        if (row > 0 && index < board[row].length - 1)
+            neighbours.put("top_right", board[row - 1][index]);
+        if (index < board[row].length - 1)
+            neighbours.put("right", board[row][index + 1]);
+        if (row < board.length - 1 && index < board[row].length - 1)
+            neighbours.put("bottom_right", board[row + 1][index]);
+        if (row < board.length - 1 && index > 0)
+            neighbours.put("bottom_left", board[row + 1][index - 1]);
+        if (index > 0)
+            neighbours.put("left", board[row][index - 1]);
+        
+        this.neighbours = neighbours;
     }
 
     private Map<String, Edge> findOrCreateEdges() {
