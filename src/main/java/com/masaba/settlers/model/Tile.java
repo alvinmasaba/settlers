@@ -7,19 +7,19 @@ public class Tile {
     private Map<String, Tile> neighbours;
     private Map<String, Edge> edges;
     private Map<String, Vertex> vertices;
-    private List<List<Tile>> board;
+    private Tile[][] board;
 
 
-    public Tile(int row, int index, List<List<Tile>> board) {
+    public Tile(int row, int index, Tile[][] board) {
         this.row = row;
         this.index = index;
         this.board = board;
-        this.neighbours = findNeighbours();
+        this.neighbours = findNeighbours(this.board, this.row, this.index);
         this.edges = findOrCreateEdges();
         this.vertices = findOrCreateVertices();
     }
 
-    private void findNeighbours(Tile[][] board, int row, int index) {
+    private Map<String, Tile> findNeighbours(Tile[][] board, int row, int index) {
         Map<String, Tile> neighbours = new HashMap<>();
 
         if (row > 0 && index > 0)
@@ -35,7 +35,7 @@ public class Tile {
         if (index > 0)
             neighbours.put("left", board[row][index - 1]);
         
-        this.neighbours = neighbours;
+        return neighbours;
     }
 
     private Map<String, Edge> findOrCreateEdges() {
