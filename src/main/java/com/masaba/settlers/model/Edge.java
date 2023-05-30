@@ -1,6 +1,7 @@
 package com.masaba.settlers.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Edge {
     private List<Tile> neighbours;
