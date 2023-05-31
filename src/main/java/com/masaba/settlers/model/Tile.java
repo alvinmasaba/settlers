@@ -56,21 +56,52 @@ public class Tile {
 
 
     private void addEdgeFromNeighbour(String neighbourKey, String edgeKey, Map<String, Edge> edges) {
-        if (neighbours.get(neighbourKey) != null) {
-            Edge edge = neighbours.get(neighbourKey).getEdges().get(edgeKey);
-            if (edge == null) {
-                edge = new Edge();
-                edge.addNeighbour(this);
-                edge.addNeighbour(neighbours.get(neighbourKey));
-            }
-            edges.put(neighbourKey, edge);
-        }
+        // If the neighbour exists, set variable edge to the corresponding edge, set to a newly created edge.
+        Edge edge = (neighbours.get(neighbourKey) != null) ? neighbours.get(neighbourKey).getEdges().get(edgeKey) : new Edge();
+        edge.addNeighbour(this);
+        edges.put(neighbourKey, edge);
     }
 
 
     private Map<String, Vertex> findOrCreateVertices() {
-        // To do
-        return new HashMap<>();
+        Map<String, Vertex> vertices = new HashMap<>();
+
+        addVertexFromNeighbours("top", "top_left", "bottom_right", 
+                                "top_right", "bottom_left", "down", vertices);
+        addVertexFromNeighbours("top_right", "top_right", "bottom_left", 
+                                "right", "left", "up", vertices);
+        addVertexFromNeighbours("bottom_right", "right", "left", 
+                                "bottom_right", "top_left", "down", vertices);
+        addVertexFromNeighbours("bottom", "bottom_right", "top_left", 
+                                "bottom_left", "top_right", "up", vertices);
+        addVertexFromNeighbours("bottom_left", "bottom_left", "top_right", 
+                                "left", "right", "down", vertices);
+        addVertexFromNeighbours("top_left", "left", "right", 
+                                "top_left", "bottom_right", "down", vertices);
+        
+        return vertices;
+    }
+    
+
+    private void addVertexFromNeighbours(String vertexName, String neighbour1TileKey, String neighbour1EdgeKey, 
+                                        String neighbour2TileKey, String neighbour2EdgeKey, 
+                                        String vertexDirection, Map<String, Vertex> vertices) {
+
+        if (neighbours.get(neighbour1TileKey) == null && neighbours.get(neighbour2TileKey) == null) {
+            // If there are no neighbouring tiles, create a new vertex and add it to vertices hash.
+            Vertex vertex = new Vertex();
+            vertices.put(vertexName, vertex);
+            // Add the vertex to the current tile edge in the given direction.
+            edges.get(neighbour1TileKey).addVertex(vertex, vertexDirection);
+
+        } else if ((neighbours.get(neighbour1TileKey) != null) || (neighbours.get(neighbour2TileKey) != null)) {
+            // If the neighbour exists, get the edge, the vertex in the given position, add the vertex to vertices array, 
+            // and add this tile as a neighbour.
+            Vertex vertex = (neighbours.get(neighbour1TileKey) != null) ? neighbours.get(neighbour1TileKey).getEdge(neighbour1EdgeKey).getVertex(vertexDirection) :
+                                                                          neighbours.get(neighbour2TileKey).getEdge(neighbour2EdgeKey).getVertex(vertexDirection);
+            vertices.put(vertexName, vertex);
+            vertex.addNeighbour(this);
+        } 
     }
 
 
@@ -78,7 +109,12 @@ public class Tile {
         return this.edges;
     }
 
-    
+
+    private Edge getEdge(String value) {
+        return this.edges.get(value);
+    }
+
+
     private Map<String, Vertex> getVertices() {
         return this.vertices;
     } 

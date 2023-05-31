@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Vertex {
     private List<Tile> neighbours;
+    private List<Edge> edges;
     private Building building;
 
     public Vertex() {
@@ -26,5 +27,9 @@ public class Vertex {
 
     public void setBuilding(Building building) {
         this.buidling = building;
+    }
+
+    public void addEdge(Edge edge) {
+        this.edges.add(edge);
     }
 }
