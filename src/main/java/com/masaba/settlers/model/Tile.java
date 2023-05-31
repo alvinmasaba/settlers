@@ -105,17 +105,17 @@ public class Tile {
     }
 
 
-    private Map<String, Edge> getEdges() {
+    public Map<String, Edge> getEdges() {
         return this.edges;
     }
 
 
-    private Edge getEdge(String value) {
+    public Edge getEdge(String value) {
         return this.edges.get(value);
     }
 
 
-    private Map<String, Vertex> getVertices() {
+    public Map<String, Vertex> getVertices() {
         return this.vertices;
     } 
 }
