@@ -117,5 +117,10 @@ public class Tile {
 
     public Map<String, Vertex> getVertices() {
         return this.vertices;
-    } 
+    }
+    
+
+    public Map<String, Tile> getNeighbours() {
+        return this.neighbours;
+    }
 }
