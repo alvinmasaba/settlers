@@ -26,7 +26,7 @@ public class Vertex {
     }
 
     public void setBuilding(Building building) {
-        this.buidling = building;
+        this.building = building;
     }
 
     public void addEdge(Edge edge) {

@@ -2,6 +2,7 @@ package com.masaba.settlers.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Edge {
@@ -13,6 +14,7 @@ public class Edge {
     public Edge() {
         this.neighbours = new ArrayList<>();
         this.road = null;
+        this.vertices = new HashMap<>();
     }
 
 
@@ -37,12 +39,12 @@ public class Edge {
 
 
     public Map<String, Vertex> getVertices() {
-        return vertices;
+        return this.vertices;
     }
 
 
     public Vertex getVertex(String direction) {
-        return vertices.get(direction);
+        return this.vertices.get(direction);
     }
 
 
