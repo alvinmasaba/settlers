@@ -18,18 +18,26 @@ class TileTest {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 board[i][j] = new Tile(i, j, board);
-                System.out.println("Row: " + i + "Index: " + j);
             }
         }
         
-        Map<String, Tile> neighbours = board[1][1].getNeighbours();
+        Tile upperRowEdgeTile = board[0][0];
+        Tile inlandTile = board[1][1];
+        Map<String, Tile> upperRowEdgeNeighbours = upperRowEdgeTile.getNeighbours();
+        Map<String, Tile> inlandNeighbours = inlandTile.getNeighbours();
 
-        assertEquals(board[0][0], neighbours.get("top_left"));
-        assertEquals(board[0][1], neighbours.get("top_right"));
-        assertEquals(board[1][2], neighbours.get("right"));
-        assertEquals(board[2][2], neighbours.get("bottom_right"));
-        assertEquals(board[2][1], neighbours.get("bottom_left"));
-        assertEquals(board[1][0], neighbours.get("left"));
+        assertEquals(board[0][0], inlandNeighbours.get("top_left"));
+        assertEquals(board[0][1], inlandNeighbours.get("top_right"));
+        assertEquals(board[1][2], inlandNeighbours.get("right"));
+        assertEquals(board[2][2], inlandNeighbours.get("bottom_right"));
+        assertEquals(board[2][1], inlandNeighbours.get("bottom_left"));
+        assertEquals(board[1][0], inlandNeighbours.get("left"));
 
+        assertNull(upperRowEdgeNeighbours.get("top_left"));
+        assertNull(upperRowEdgeNeighbours.get("top_right"));
+        assertEquals(board[0][1], upperRowEdgeNeighbours.get("right"));
+        assertEquals(board[1][1], upperRowEdgeNeighbours.get("bottom_right"));
+        assertEquals(board[1][0], upperRowEdgeNeighbours.get("bottom_left"));
+        assertNull(upperRowEdgeNeighbours.get("left"));
     }
 }

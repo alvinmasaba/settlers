@@ -25,43 +25,43 @@ public class Tile {
         Map<String, Tile> neighbours = new HashMap<>();
 
         if (row > 0 && index > 0) {
-            neighbours.put("top_left", board[row - 1][index - 1]);
-            addSelfToNeighbour(board[row - 1][index - 1], "bottom_right");
+            addIfNeighborExists("top_left", "bottom_right", (row - 1), (index - 1), neighbours);
         }
 
         if ((row > (board.length / 2)) && index == 0) {
-            neighbours.put("top_left", board[row - 1][index]);
-            addSelfToNeighbour(board[row - 1][index], "bottom_right");
+            addIfNeighborExists("top_left", "bottom_right", (row - 1), index, neighbours);
         }
 
         if (row > 0 && index < board[row].length - 1) {
-            neighbours.put("top_right", board[row - 1][index]);
-            addSelfToNeighbour(board[row - 1][index], "bottom_left");
+            addIfNeighborExists("top_right", "bottom_left", (row - 1), index, neighbours);
         }
 
         if ((row > (board.length / 2)) && (index == board[row].length - 1)) {
-            neighbours.put("top_right", board[row - 1][index + 1]);
-            addSelfToNeighbour(board[row - 1][index + 1], "bottom_left");
+            addIfNeighborExists("top_right", "bottom_left", (row - 1), (index + 1), neighbours);
         }
 
         if (index < board[row].length - 1) {
-            neighbours.put("right", board[row][index + 1]);
-            addSelfToNeighbour(board[row][index + 1], "left");
+            addIfNeighborExists("right", "left", row, (index + 1), neighbours);
         }
+
         if (row < board.length - 1 && index < board[row].length - 1) {
-            neighbours.put("bottom_right", board[row + 1][index]);
-            addSelfToNeighbour(board[row + 1][index], "top_left");
+            addIfNeighborExists("bottom_right", "top_left", (row + 1), index, neighbours);
         }
+
         if (row < board.length - 1 && index > 0) {
-            neighbours.put("bottom_left", board[row + 1][index - 1]);
-            addSelfToNeighbour(board[row + 1][index - 1], "top_right");
+            addIfNeighborExists("bottom_left", "top_right", (row + 1), (index - 1), neighbours);
         }
+
         if (index > 0) {
-            neighbours.put("left", board[row][index - 1]);
-            addSelfToNeighbour(board[row][index - 1], "right");
+            addIfNeighborExists("left", "right", row, (index - 1), neighbours);
         }
         
         return neighbours;
+    }
+
+    private void addIfNeighborExists(String direction, String oppositeDirection, int newRow, int newCol, Map<String, Tile> neighbours) {        
+        neighbours.put(direction, board[newRow][newCol]);
+        addSelfToNeighbour(board[newRow][newCol], oppositeDirection);
     }
 
 
@@ -97,24 +97,24 @@ public class Tile {
     private Map<String, Vertex> findOrCreateVertices() {
         Map<String, Vertex> vertices = new HashMap<>();
 
-        vertices = addVertexFromNeighbours("top", "top_left", "bottom_right", 
+        addVertexFromNeighbours("top", "top_left", "bottom_right", 
                                 "top_right", "bottom_left", "down", vertices, 1);
-        vertices =addVertexFromNeighbours("top_right", "top_right", "bottom_left", 
+        addVertexFromNeighbours("top_right", "top_right", "bottom_left", 
                                 "right", "left", "up", vertices, 2);
-        vertices = addVertexFromNeighbours("bottom_right", "right", "left", 
+        addVertexFromNeighbours("bottom_right", "right", "left", 
                                 "bottom_right", "top_left", "down", vertices, 3);
-        vertices = addVertexFromNeighbours("bottom", "bottom_right", "top_left", 
+        addVertexFromNeighbours("bottom", "bottom_right", "top_left", 
                                 "bottom_left", "top_right", "up", vertices, 4);
-        vertices = addVertexFromNeighbours("bottom_left", "bottom_left", "top_right", 
+        addVertexFromNeighbours("bottom_left", "bottom_left", "top_right", 
                                 "left", "right", "down", vertices, 5);
-        vertices = addVertexFromNeighbours("top_left", "left", "right", 
+        addVertexFromNeighbours("top_left", "left", "right", 
                                 "top_left", "bottom_right", "up", vertices, 6);
         
         return vertices;
     }
     
 
-    private Map<String, Vertex> addVertexFromNeighbours(String vertexName, String neighbour1TileKey, String neighbour1EdgeKey, 
+    private void addVertexFromNeighbours(String vertexName, String neighbour1TileKey, String neighbour1EdgeKey, 
                                         String neighbour2TileKey, String neighbour2EdgeKey, 
                                         String vertexDirection, Map<String, Vertex> vertices, int index) {
         if (neighbours.get(neighbour1TileKey) == null && neighbours.get(neighbour2TileKey) == null) {
@@ -124,8 +124,6 @@ public class Tile {
             // Add the vertex to the leading and lagging edges in the given direction.
             edges.get(neighbour1TileKey).addVertex(vertex, vertexDirection);
             edges.get(neighbour2TileKey).addVertex(vertex, vertexDirection);
-
-            System.out.println("Vertex successfully added");
         } 
         
         if ((neighbours.get(neighbour1TileKey) != null) || (neighbours.get(neighbour2TileKey) != null)) {
@@ -137,16 +135,12 @@ public class Tile {
                 Vertex vertex = neighbours.get(neighbour1TileKey).getEdge(neighbour1EdgeKey).getVertices().get(vertexDirection);
                 vertices.put(vertexName, vertex);
                 vertex.addNeighbour(this);
-                System.out.println("Shared vertex successfully handled");
             } else {
                 Vertex vertex = neighbours.get(neighbour2TileKey).getEdge(neighbour2EdgeKey).getVertices().get(vertexDirection);
                 vertices.put(vertexName, vertex);
                 vertex.addNeighbour(this);
-                System.out.println("Shared vertex successfully handled");
             }
-        } 
-    
-        return vertices;
+        }
     }
 
 
