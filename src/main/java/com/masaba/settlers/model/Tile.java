@@ -27,37 +27,30 @@ public class Tile {
         if (row > 0 && index > 0) {
             addIfNeighborExists("top_left", "bottom_right", (row - 1), (index - 1), neighbours);
         }
-
         if ((row > (board.length / 2)) && index == 0) {
             addIfNeighborExists("top_left", "bottom_right", (row - 1), index, neighbours);
         }
-
         if (row > 0 && index < board[row].length - 1) {
             addIfNeighborExists("top_right", "bottom_left", (row - 1), index, neighbours);
         }
-
         if ((row > (board.length / 2)) && (index == board[row].length - 1)) {
             addIfNeighborExists("top_right", "bottom_left", (row - 1), (index + 1), neighbours);
         }
-
         if (index < board[row].length - 1) {
             addIfNeighborExists("right", "left", row, (index + 1), neighbours);
         }
-
         if (row < board.length - 1 && index < board[row].length - 1) {
             addIfNeighborExists("bottom_right", "top_left", (row + 1), index, neighbours);
         }
-
         if (row < board.length - 1 && index > 0) {
             addIfNeighborExists("bottom_left", "top_right", (row + 1), (index - 1), neighbours);
         }
-
         if (index > 0) {
             addIfNeighborExists("left", "right", row, (index - 1), neighbours);
-        }
-        
+        } 
         return neighbours;
     }
+
 
     private void addIfNeighborExists(String direction, String oppositeDirection, int newRow, int newCol, Map<String, Tile> neighbours) {        
         neighbours.put(direction, board[newRow][newCol]);
@@ -97,51 +90,61 @@ public class Tile {
     private Map<String, Vertex> findOrCreateVertices() {
         Map<String, Vertex> vertices = new HashMap<>();
 
-        addVertexFromNeighbours("top", "top_left", "bottom_right", 
+        createOraddVertexFromNeighbours("top", "top_left", "bottom_right", 
                                 "top_right", "bottom_left", "down", vertices, 1);
-        addVertexFromNeighbours("top_right", "top_right", "bottom_left", 
+        createOraddVertexFromNeighbours("top_right", "top_right", "bottom_left", 
                                 "right", "left", "up", vertices, 2);
-        addVertexFromNeighbours("bottom_right", "right", "left", 
+        createOraddVertexFromNeighbours("bottom_right", "right", "left", 
                                 "bottom_right", "top_left", "down", vertices, 3);
-        addVertexFromNeighbours("bottom", "bottom_right", "top_left", 
+        createOraddVertexFromNeighbours("bottom", "bottom_right", "top_left", 
                                 "bottom_left", "top_right", "up", vertices, 4);
-        addVertexFromNeighbours("bottom_left", "bottom_left", "top_right", 
+        createOraddVertexFromNeighbours("bottom_left", "bottom_left", "top_right", 
                                 "left", "right", "down", vertices, 5);
-        addVertexFromNeighbours("top_left", "left", "right", 
+        createOraddVertexFromNeighbours("top_left", "left", "right", 
                                 "top_left", "bottom_right", "up", vertices, 6);
         
         return vertices;
     }
     
 
-    private void addVertexFromNeighbours(String vertexName, String neighbour1TileKey, String neighbour1EdgeKey, 
+    private void createOraddVertexFromNeighbours(String vertexName, String neighbour1TileKey, String neighbour1EdgeKey, 
                                         String neighbour2TileKey, String neighbour2EdgeKey, 
                                         String vertexDirection, Map<String, Vertex> vertices, int index) {
+        // If there are no neighbouring tiles, creates a new vertex and adds it to vertices hash.
+        // Then adds the vertex to the leading and lagging edges in the given direction.
+        // The leading edge shares the same key as neighbour1TileKey and the lagging with neighbour2Tilekey.
         if (neighbours.get(neighbour1TileKey) == null && neighbours.get(neighbour2TileKey) == null) {
-            // If there are no neighbouring tiles, create a new vertex and add it to vertices hash.
             Vertex vertex = new Vertex();
             vertices.put(vertexName, vertex);
-            // Add the vertex to the leading and lagging edges in the given direction.
             edges.get(neighbour1TileKey).addVertex(vertex, vertexDirection);
             edges.get(neighbour2TileKey).addVertex(vertex, vertexDirection);
         } 
-        
-        if ((neighbours.get(neighbour1TileKey) != null) || (neighbours.get(neighbour2TileKey) != null)) {
-            // If there are neighbours, finds which edge contains the vertex, adds the vertex to vertices array, 
-            // and adds this tile as a neighbour to the vertex.
-            if ((neighbours.get(neighbour1TileKey) != null) && 
-                (neighbours.get(neighbour1TileKey).getEdge(neighbour1EdgeKey).getVertices().containsKey(vertexDirection))) {
-                
-                Vertex vertex = neighbours.get(neighbour1TileKey).getEdge(neighbour1EdgeKey).getVertices().get(vertexDirection);
-                vertices.put(vertexName, vertex);
-                vertex.addNeighbour(this);
-            } else {
-                Vertex vertex = neighbours.get(neighbour2TileKey).getEdge(neighbour2EdgeKey).getVertices().get(vertexDirection);
-                vertices.put(vertexName, vertex);
-                vertex.addNeighbour(this);
+        // To determine which neighbour contains the vertex, this function will evaluate to false if a neighbour and
+        // desired vertex aren't found. Otherwise it will add the vertex and return true. Order of the conditionals ensures
+        // that the vertex will be whether it is on the leading, lagging, or both edges.
+        else {
+            Boolean isVertexAdded = addVertexFromExistingNeighbour(neighbour1TileKey, neighbour1EdgeKey, vertexDirection, vertices, vertexName);
+            if (!isVertexAdded) {
+                addVertexFromExistingNeighbour(neighbour2TileKey, neighbour2EdgeKey, vertexDirection, vertices, vertexName);
             }
         }
     }
+
+
+    private Boolean addVertexFromExistingNeighbour(String neighbourTileKey, String neighbourEdgeKey, String vertexDirection, 
+                                            Map<String, Vertex> vertices, String vertexName) {
+    if ((neighbours.get(neighbourTileKey) != null) &&
+        (neighbours.get(neighbourTileKey).getEdge(neighbourEdgeKey).getVertices().containsKey(vertexDirection))) {
+
+        Vertex vertex = neighbours.get(neighbourTileKey).getEdge(neighbourEdgeKey).getVertices().get(vertexDirection);
+        vertices.put(vertexName, vertex);
+        vertex.addNeighbour(this);
+
+        return true;
+    }
+
+    return false;
+}
 
 
     public Map<String, Edge> getEdges() {
