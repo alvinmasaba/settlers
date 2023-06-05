@@ -25,4 +25,13 @@ public class Board {
 
         return board;
     }
+
+
+    public Tile getTile(int row, int col) {
+        if (row >= 0 && row < board.length && col >= 0 && col < board[row].length) {
+            return board[row][col];
+        } else {
+            return null;
+        }
+    }
 }
