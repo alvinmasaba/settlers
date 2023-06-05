@@ -15,55 +15,49 @@ public class Tile {
         this.row = row;
         this.index = index;
         this.board = board;
-        this.neighbours = findNeighbours(this.board, this.row, this.index);
+        this.neighbours = findAndAddNeighbours(this.board, this.row, this.index);
         this.edges = findOrCreateEdges();
         this.vertices = findOrCreateVertices();
     }
 
 
-    private Map<String, Tile> findNeighbours(Tile[][] board, int row, int index) {
+    private Map<String, Tile> findAndAddNeighbours(Tile[][] board, int row, int index) {
         Map<String, Tile> neighbours = new HashMap<>();
-
-        if (row > 0 && index > 0) {
-            addIfNeighborExists("top_left", "bottom_right", (row - 1), (index - 1), neighbours);
+        int midRow = (board.length % 2 == 0) ? board.length / 2 : (board.length - 1) / 2;
+    
+        String[] directions = { "top_left", "top_right", "right", "bottom_right", "bottom_left", "left" };
+        String[] oppositeDirections = { "bottom_right", "bottom_left", "left", "top_left", "top_right", "right" };
+        int[] rowAdjustments = { -1, -1, 0, 1, 1, 0 };
+        int[] colAdjustments = { -1, 0, 1, 1, -1, -1 };
+        int[] colAdjustmentsLowerHalf = { 0, 1, 1, 0, -1, -1 };
+    
+        for (int i = 0; i < 6; i++) {
+            int newRow = row + rowAdjustments[i];
+            int newCol = (row > midRow) ? index + colAdjustmentsLowerHalf[i] : index + colAdjustments[i];
+    
+            // Avoid invalid index
+            if (newRow >= 0 && newRow < board.length && newCol >= 0 && newCol < board[newRow].length) {
+                addIfNeighborExists(directions[i], oppositeDirections[i], newRow, newCol, neighbours);
+            }
         }
-        if ((row > (board.length / 2)) && index == 0) {
-            addIfNeighborExists("top_left", "bottom_right", (row - 1), index, neighbours);
-        }
-        if (row > 0 && index < board[row].length - 1) {
-            addIfNeighborExists("top_right", "bottom_left", (row - 1), index, neighbours);
-        }
-        if ((row > (board.length / 2)) && (index == board[row].length - 1)) {
-            addIfNeighborExists("top_right", "bottom_left", (row - 1), (index + 1), neighbours);
-        }
-        if (index < board[row].length - 1) {
-            addIfNeighborExists("right", "left", row, (index + 1), neighbours);
-        }
-        if (row < board.length - 1 && index < board[row].length - 1) {
-            addIfNeighborExists("bottom_right", "top_left", (row + 1), index, neighbours);
-        }
-        if (row < board.length - 1 && index > 0) {
-            addIfNeighborExists("bottom_left", "top_right", (row + 1), (index - 1), neighbours);
-        }
-        if (index > 0) {
-            addIfNeighborExists("left", "right", row, (index - 1), neighbours);
-        } 
+    
         return neighbours;
     }
-
-
-    private void addIfNeighborExists(String direction, String oppositeDirection, int newRow, int newCol, Map<String, Tile> neighbours) {        
-        neighbours.put(direction, board[newRow][newCol]);
-        addSelfToNeighbour(board[newRow][newCol], oppositeDirection);
+    
+    private void addIfNeighborExists(String direction, String oppositeDirection, int newRow, int newCol, Map<String, Tile> neighbours) {
+        Tile neighborTile = board[newRow][newCol];
+        if (neighborTile != null) {
+            neighbours.put(direction, neighborTile);
+            addSelfToNeighbour(neighborTile, oppositeDirection);
+        }
     }
-
-
+    
     private void addSelfToNeighbour(Tile neighbour, String direction) {
         if (neighbour != null) {
             neighbour.neighbours.put(direction, this);
         }
     }
-
+    
 
     private Map<String, Edge> findOrCreateEdges() {
         Map<String, Edge> edges = new HashMap<>();
@@ -164,5 +158,13 @@ public class Tile {
 
     public Map<String, Tile> getNeighbours() {
         return this.neighbours;
+    }
+
+    public int getRow() {
+        return this.row;
+    }
+
+    public int getIndex() {
+        return this.index;
     }
 }
