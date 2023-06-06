@@ -75,4 +75,19 @@ class TileTest {
         assertEquals(tile2, neighbours1.get("bottom_left"));
         assertEquals(tile1, neighbours2.get("top_right"));
     }
+
+    @Test
+    void testEdgesHaveTwoVertices() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                Map<String, Edge> edges = board[i][j].getEdges();
+                // System.out.println("Tile [" + i + "]" + "[" + j + "] Vertices: ");               
+                for (var entry : edges.entrySet()) {
+                    //System.out.println(entry.getKey() + ": " + entry.getValue().getVertices());
+                    assertNotNull(entry.getValue().getVertex("up"));
+                    assertNotNull(entry.getValue().getVertex("down"));
+                }
+            }
+        }
+    }
 }
