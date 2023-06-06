@@ -130,26 +130,20 @@ public class Tile {
         // desired vertex aren't found. Otherwise it will add the vertex to the vertices map and return true. Order of the conditionals ensures
         // that the vertex will be found whether it is on the leading, lagging, or both edges.
         else {
-            Boolean isVertexAdded = addVertexFromExistingNeighbour(neighbour1TileKey, neighbour1EdgeKey, vertexDirection, vertices, vertexName);
-            if (!isVertexAdded) {
+            Optional<Vertex> maybeVertex = addVertexFromExistingNeighbour(neighbour1TileKey, neighbour1EdgeKey, vertexDirection, vertices, vertexName);
+            if (!maybeVertex.isPresent()) {
                 addVertexFromExistingNeighbour(neighbour2TileKey, neighbour2EdgeKey, vertexDirection, vertices, vertexName);
-                // Preceding function adds vertex to vertices map but not to specific edges. Following conditionals check for presence
-                // of desired vertex on the appropriate edge, adding it if it is not present.
-                if (!edges.get(neighbour1TileKey).getVertices().containsKey(vertexDirection)) {
-                    Vertex vertex = neighbours.get(neighbour2TileKey).getEdge(neighbour2EdgeKey).getVertices().get(vertexDirection);
-                    edges.get(neighbour1TileKey).addVertex(vertex, vertexDirection);
-                }
+                Vertex vertex = neighbours.get(neighbour2TileKey).getEdge(neighbour2EdgeKey).getVertices().get(vertexDirection);
+                edges.get(neighbour1TileKey).addVertex(vertex, vertexDirection);
             } else {
-                if (!edges.get(neighbour2TileKey).getVertices().containsKey(vertexDirection)) {
-                    Vertex vertex = neighbours.get(neighbour1TileKey).getEdge(neighbour1EdgeKey).getVertices().get(vertexDirection);
-                    edges.get(neighbour2TileKey).addVertex(vertex, vertexDirection);
-                }
+                Vertex vertex = neighbours.get(neighbour1TileKey).getEdge(neighbour1EdgeKey).getVertices().get(vertexDirection);
+                edges.get(neighbour2TileKey).addVertex(vertex, vertexDirection);
             }
         }
     }
 
 
-    private Boolean addVertexFromExistingNeighbour(String neighbourTileKey, String neighbourEdgeKey, String vertexDirection, 
+    private Optional<Vertex> addVertexFromExistingNeighbour(String neighbourTileKey, String neighbourEdgeKey, String vertexDirection, 
                                             Map<String, Vertex> vertices, String vertexName) {
     if ((neighbours.get(neighbourTileKey) != null) &&
         (neighbours.get(neighbourTileKey).getEdge(neighbourEdgeKey).getVertices().containsKey(vertexDirection))) {
@@ -158,10 +152,10 @@ public class Tile {
         vertices.put(vertexName, vertex);
         vertex.addNeighbour(this);
 
-        return true;
+        return Optional.of(vertex);
     }
 
-    return false;
+    return Optional.empty();
 }
 
 

@@ -49,6 +49,8 @@ public class Edge {
 
 
     public void addVertex(Vertex vertex, String direction) {
-        this.vertices.put(direction, vertex);
+        if (!this.vertices.containsKey(direction)) {
+            this.vertices.put(direction, vertex);
+        }
     }
 }
