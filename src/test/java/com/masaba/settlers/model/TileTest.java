@@ -77,7 +77,44 @@ class TileTest {
     }
 
     @Test
-    void testEdgesHaveTwoVertices() {
+    void testEdgeCount() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                Map<String, Edge> edges = board[i][j].getEdges();
+                assertEquals(6, edges.size());
+            }
+        }
+    }
+
+    @Test
+    void testVertexCount() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                Map<String, Vertex> vertices = board[i][j].getVertices();
+                assertEquals(6, vertices.size());
+            }
+        }
+    }
+}
+
+class EdgeTest {
+    Tile[][] board = new Board().board;
+
+    @Test
+    void testEdgesMappedToTwoVertices() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                Map<String, Edge> edges = board[i][j].getEdges();
+                for (var entry : edges.entrySet()) {
+                    Edge edge = entry.getValue();
+                    assertEquals(2, edge.getVertices().size());
+                }
+            }
+        }
+    }
+
+    @Test
+    void testEdgesHaveUpandDownVertices() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 Map<String, Edge> edges = board[i][j].getEdges();
@@ -90,4 +127,6 @@ class TileTest {
             }
         }
     }
+
 }
+
