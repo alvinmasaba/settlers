@@ -10,6 +10,7 @@ public class Vertex {
 
     public Vertex() {
         this.neighbours = new ArrayList<>();
+        this.edges = new ArrayList<>();
         this.building = null;
     }
 
@@ -31,5 +32,9 @@ public class Vertex {
 
     public void addEdge(Edge edge) {
         this.edges.add(edge);
+    }
+
+    public List<Edge> getEdges() {
+        return this.edges;
     }
 }

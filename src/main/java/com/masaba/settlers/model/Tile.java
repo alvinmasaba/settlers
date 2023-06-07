@@ -123,6 +123,8 @@ public class Tile {
         if (neighbours.get(neighbour1TileKey) == null && neighbours.get(neighbour2TileKey) == null) {
             Vertex vertex = new Vertex();
             vertices.put(vertexName, vertex);
+            addEdgeToVertex(vertex, edges.get(neighbour1TileKey));
+            addEdgeToVertex(vertex, edges.get(neighbour2TileKey));
             edges.get(neighbour1TileKey).addVertex(vertex, vertexDirection);
             edges.get(neighbour2TileKey).addVertex(vertex, vertexDirection);
         } 
@@ -134,11 +136,22 @@ public class Tile {
             if (!maybeVertex.isPresent()) {
                 addVertexFromExistingNeighbour(neighbour2TileKey, neighbour2EdgeKey, vertexDirection, vertices, vertexName);
                 Vertex vertex = neighbours.get(neighbour2TileKey).getEdge(neighbour2EdgeKey).getVertices().get(vertexDirection);
+                addEdgeToVertex(vertex, edges.get(neighbour1TileKey));
+                addEdgeToVertex(vertex, edges.get(neighbour2TileKey));
                 edges.get(neighbour1TileKey).addVertex(vertex, vertexDirection);
             } else {
                 Vertex vertex = neighbours.get(neighbour1TileKey).getEdge(neighbour1EdgeKey).getVertices().get(vertexDirection);
+                addEdgeToVertex(vertex, edges.get(neighbour1TileKey));
+                addEdgeToVertex(vertex, edges.get(neighbour2TileKey));
                 edges.get(neighbour2TileKey).addVertex(vertex, vertexDirection);
             }
+        }
+    }
+
+    
+    private void addEdgeToVertex(Vertex vertex, Edge edge) {
+        if (!(vertex.getEdges().contains(edge))) {
+            vertex.addEdge(edge);
         }
     }
 
