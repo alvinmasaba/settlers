@@ -1,6 +1,7 @@
 package com.masaba.settlers.model;
 
 import java.util.*;
+import com.masaba.settlers.factory.*;
 
 public class Tile {
     private int row;
@@ -119,7 +120,7 @@ public class Tile {
                                         String vertexDirection, Map<String, Vertex> vertices) {
         // Check if either neighbor already has the desired vertex
         Vertex vertex = findVertexFromNeighbour(neighbour1TileKey, neighbour1EdgeKey, vertexDirection);
-        
+
         if (vertex == null) {
             vertex = findVertexFromNeighbour(neighbour2TileKey, neighbour2EdgeKey, vertexDirection);
         }
