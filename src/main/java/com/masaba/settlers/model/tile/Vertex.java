@@ -1,7 +1,9 @@
-package com.masaba.settlers.model;
+package com.masaba.settlers.model.tile;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.masaba.settlers.model.buildings.Building;
 
 public class Vertex {
     private List<Tile> neighbours;

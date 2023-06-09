@@ -2,6 +2,9 @@ package com.masaba.settlers.model;
 
 import java.util.*;
 
+import com.masaba.settlers.model.buildings.Building;
+import com.masaba.settlers.model.cards.DevelopmentCard;
+
 public class Player {
     private String name;
     private Map<String, Integer> resources;

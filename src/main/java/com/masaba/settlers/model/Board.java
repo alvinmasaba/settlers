@@ -1,5 +1,7 @@
 package com.masaba.settlers.model;
 
+import com.masaba.settlers.model.tile.Tile;
+
 public class Board {
     public Tile[][] board;
 

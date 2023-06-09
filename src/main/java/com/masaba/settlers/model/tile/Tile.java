@@ -1,4 +1,4 @@
-package com.masaba.settlers.model;
+package com.masaba.settlers.model.tile;
 
 import java.util.*;
 import com.masaba.settlers.factory.*;

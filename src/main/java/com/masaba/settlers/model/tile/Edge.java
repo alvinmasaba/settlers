@@ -1,9 +1,11 @@
-package com.masaba.settlers.model;
+package com.masaba.settlers.model.tile;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.masaba.settlers.model.Road;
 
 public class Edge {
     private List<Tile> neighbours;

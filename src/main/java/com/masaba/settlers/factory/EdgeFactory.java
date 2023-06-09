@@ -2,6 +2,8 @@ package com.masaba.settlers.factory;
 
 import java.util.*;
 import com.masaba.settlers.model.*;
+import com.masaba.settlers.model.tile.Edge;
+import com.masaba.settlers.model.tile.Tile;
 
 public class EdgeFactory {
     private Map<String, Edge> edges = new HashMap<>();

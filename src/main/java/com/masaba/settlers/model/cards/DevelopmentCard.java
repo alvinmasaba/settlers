@@ -1,4 +1,6 @@
-package com.masaba.settlers.model;
+package com.masaba.settlers.model.cards;
+
+import com.masaba.settlers.model.Player;
 
 public abstract class DevelopmentCard {
     private Player owner;

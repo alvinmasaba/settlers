@@ -1,6 +1,8 @@
 package com.masaba.settlers.factory;
 
 import com.masaba.settlers.model.*;
+import com.masaba.settlers.model.tile.Tile;
+
 import java.util.*;
 
 public class NeighbourFactory {

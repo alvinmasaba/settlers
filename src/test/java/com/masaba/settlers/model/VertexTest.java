@@ -1,6 +1,10 @@
 package com.masaba.settlers.model;
 
 import org.junit.jupiter.api.Test;
+
+import com.masaba.settlers.model.tile.Tile;
+import com.masaba.settlers.model.tile.Vertex;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Map;
 

@@ -1,11 +1,11 @@
 package com.masaba.settlers.factory;
 
-import com.masaba.settlers.model.Tile;
-import com.masaba.settlers.model.Vertex;
-import com.masaba.settlers.model.Edge;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.masaba.settlers.model.tile.Edge;
+import com.masaba.settlers.model.tile.Tile;
+import com.masaba.settlers.model.tile.Vertex;
 
 public class VertexFactory {
     private Tile tile;
