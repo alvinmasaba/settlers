@@ -29,7 +29,7 @@ public class Board {
     }
 
 
-    public Tile getTile(int row, int col) {
+    public Tile getTileFromBoard(int row, int col) {
         if (row >= 0 && row < board.length && col >= 0 && col < board[row].length) {
             return board[row][col];
         } else {

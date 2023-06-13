@@ -1,7 +1,8 @@
-package com.masaba.settlers.model;
+package com.masaba.settlers.model.players;
 
 import java.util.*;
 
+import com.masaba.settlers.model.Road;
 import com.masaba.settlers.model.buildings.Building;
 import com.masaba.settlers.model.cards.DevelopmentCard;
 
@@ -13,6 +14,7 @@ public class Player {
     private List<Building> buildings;
     private int victoryPoints;
 
+
     public Player(String name) {
         this.name = name;
         this.resources = new HashMap<>();
@@ -22,7 +24,23 @@ public class Player {
         this.victoryPoints = 0;
     }
 
-    // basic getters and setters here
 
-    // other potential methods to handle player actions
+    public void addBuilding(Building building) {
+        buildings.add(building);
+    }
+
+
+    public List<Building> getBuildings() {
+        return this.buildings;
+    }
+
+    
+    public void addRoad(Road road) {
+        this.roads.add(road);
+    }
+
+
+    public List<Road> getRoads() {
+        return this.roads;
+    }
 }
