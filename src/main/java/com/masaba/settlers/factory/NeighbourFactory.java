@@ -1,6 +1,5 @@
 package com.masaba.settlers.factory;
 
-import com.masaba.settlers.model.*;
 import com.masaba.settlers.model.tile.Tile;
 
 import java.util.*;
@@ -34,14 +33,14 @@ public class NeighbourFactory {
         // For rows greater than midRow, the column adjustments are different
         int[] colAdjustmentsLowerHalf = { 0, 1, 1, 0, -1, -1 };
 
-        // Loop through all six directions
-        for (int i = 0; i < 6; i++) {
+        // Loop through all directions
+        for (int i = 0; i < directions.length; i++) {
             // Calculate the row and column of the neighbouring tile in the current direction
             int newRow = row + rowAdjustments[i];
             int newCol = (row > midRow) ? index + colAdjustmentsLowerHalf[i] : index + colAdjustments[i];
 
             // Check that the calculated row and column are valid indexes in the board
-            if (newRow >= 0 && newRow < board.length && newCol >= 0 && newCol < this.board[newRow].length) {
+            if (isValidIndex(newRow, newCol)) {
                 // If they are, attempt to add the neighbouring tile in that direction
                 addIfNeighborExists(directions[i], oppositeDirections[i], newRow, newCol, neighbours);
             }
@@ -66,5 +65,14 @@ public class NeighbourFactory {
         if (neighbour != null) {
             neighbour.addNeighbour(direction, tile);
         }
-    }    
+    }
+    
+    
+    private Boolean isValidIndex(int row, int col) {
+        if (row >= 0 && row < board.length && col >= 0 && col < this.board[row].length) {
+            return true;
+        }
+
+        return false;
+    }
 }
