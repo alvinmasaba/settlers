@@ -43,17 +43,15 @@ public class NeighbourFactory {
             Tile neighborTile = board[newRow][newCol];
             if (neighborTile != null) {
                 neighbours.put(direction, neighborTile);
-                addTileToNeighbour(neighborTile, oppositeDirection);
+                addSelfToNeighbour(neighborTile, oppositeDirection);
             }
 
         }
     }
 
 
-    private void addTileToNeighbour(Tile neighbour, String direction) {
-        if (neighbour != null) {
-            neighbour.addNeighbour(direction, tile);
-        }
+    private void addSelfToNeighbour(Tile neighbour, String direction) {
+        neighbour.addNeighbour(direction, this.tile);
     }
     
     
