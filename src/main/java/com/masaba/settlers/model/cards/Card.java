@@ -1,15 +1,28 @@
 package com.masaba.settlers.model.cards;
 
-public class Card {
-    private String name;
+import com.masaba.settlers.model.players.Player;
+
+public abstract class Card {
+    private Player owner;
+    private String type;
 
 
-    public Card(String name) {
-        this.name = name;
+    public Card(Player owner, String type) {
+        this.owner = owner;
+        this.type = type;
     }
 
 
-    public String getName() {
-        return this.name;
+    // method that will be overridden by subclasses to use the card
+    public abstract void use();
+
+
+    public Player getOwner() {
+        return this.owner;
+    }
+
+
+    public String getType() {
+        return this.type;
     }
 }
