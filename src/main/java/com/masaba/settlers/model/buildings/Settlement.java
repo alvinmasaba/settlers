@@ -1,5 +1,9 @@
 package com.masaba.settlers.model.buildings;
 
-public class Settlement {
-    
+import com.masaba.settlers.model.*;
+
+public class Settlement extends Building {
+    public Settlement(Player owner) {
+        super(owner);
+    }
 }
