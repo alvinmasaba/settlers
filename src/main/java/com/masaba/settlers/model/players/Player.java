@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.masaba.settlers.model.Road;
 import com.masaba.settlers.model.tile.*;
-import com.masaba.settlers.model.buildings.Building;
+import com.masaba.settlers.model.buildings.*;
 import com.masaba.settlers.model.cards.DevelopmentCard;
 
 public class Player {
@@ -14,7 +14,7 @@ public class Player {
     private List<DevelopmentCard> developmentCards;
     private List<Road> roads;
     private List<Building> buildings;
-    private int score;
+    private Integer score;
 
 
     public Player(String name, String colour) {
@@ -28,32 +28,43 @@ public class Player {
     }
 
 
-    public void addBuilding(Building building) {
-        buildings.add(building);
-    }
-
-
     public List<Building> getBuildings() {
         return this.buildings;
-    }
-
-    
-    public void addRoad(Edge edge) {
-        int clay = this.resources.get("clay");
-        int wood = this.resources.get("wood");
-
-
-        // The cost of a road is 1 clay and 1 wood.
-        if (clay > 0 && wood > 0) {
-            useResource("clay", 1);
-            useResource("wood", 1);
-            buildRoad(edge);
-        }
     }
 
 
     public List<Road> getRoads() {
         return this.roads;
+    }
+
+    
+    public void addSettlement(Vertex vertex) {
+        Map<String, Integer> requiredResources = Map.of("clay", 1, "wheat", 1, "wood", 1, "wool", 1);
+
+        if (haveSufficientResources(requiredResources)) {
+            useResources(requiredResources);
+            buildBuilding("settlement", vertex);
+        }
+    }
+
+
+    public void addCity(Vertex vertex) {
+        Map<String, Integer> requiredResources = Map.of("wheat", 2, "ore", 3);
+
+        if (haveSufficientResources(requiredResources)) {
+            useResources(requiredResources);
+            buildBuilding("city", vertex);
+        }
+    }
+
+
+    public void addRoad(Edge edge) {
+        Map<String, Integer> requiredResources = Map.of("clay", 1, "wood", 1);
+
+        if (haveSufficientResources(requiredResources)) {
+            useResources(requiredResources);
+            buildRoad(edge);
+        }
     }
 
 
@@ -63,8 +74,33 @@ public class Player {
     }
 
 
-    private void useResource(String resource, int num) {
-        // Replace the current value of resource with the updated value
-        resources.put(resource, resources.get(resource) - num);
+    private void buildBuilding(String type, Vertex vertex) {
+        if (type == "settlement") {
+            Settlement settlement = new Settlement(this, vertex);
+            buildings.add(settlement);
+        } else {
+            City city = new City(this, vertex);
+            buildings.add(city);
+        }
+    }
+
+
+    private void useResources(Map<String, Integer> usedResources) {
+        // Replace the current values of the used resources with their updated values
+        for (var resource : usedResources.entrySet()) {
+            this.resources.put(resource.getKey(), this.resources.get(resource.getKey()) - resource.getValue());
+        }
+    }
+
+    
+    private Boolean haveSufficientResources(Map<String, Integer> requiredResources) {
+        // Return false if number of owned resources is less than required
+        for (var resource : requiredResources.entrySet()) {
+            if (this.resources.get(resource.getKey()) < resource.getValue()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
