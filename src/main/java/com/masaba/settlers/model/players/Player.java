@@ -102,7 +102,7 @@ public class Player {
     }
 
     
-    private Boolean haveSufficientResources(Map<String, Integer> requiredResources) {
+    public Boolean haveSufficientResources(Map<String, Integer> requiredResources) {
         // Return false if number of owned resources is less than required
         for (var resource : requiredResources.entrySet()) {
             if (this.resources.get(resource.getKey()) < resource.getValue()) {

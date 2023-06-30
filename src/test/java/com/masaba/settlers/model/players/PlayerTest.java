@@ -56,4 +56,14 @@ class PlayerTest {
         player.addRoad(e);
         assertEquals(1, player.getRoads().size()); // Now the player should have one road
     }
+
+    @Test
+    void testHaveSufficientResources() {
+        player.addResources(Map.of("clay", 1, "wheat", 1, "wood", 1, "wool", 1));
+        Map<String, Integer> sufficientResources = Map.of("clay", 1, "wheat", 1, "wood", 1, "wool", 1);
+        Map<String, Integer> insufficientResources = Map.of("clay", 3, "wheat", 1, "wood", 1, "wool", 1);
+
+        assertTrue(player.haveSufficientResources(sufficientResources));
+        assertFalse(player.haveSufficientResources(insufficientResources));
+    }
 }
