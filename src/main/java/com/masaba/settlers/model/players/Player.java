@@ -20,7 +20,7 @@ public class Player {
     public Player(String name, String colour) {
         this.name = name;
         this.colour = colour;
-        this.resources = Map.of("clay", 0, "ore", 0, "wheat", 0, "wood", 0, "wool", 0);
+        this.resources = new HashMap<>(Map.of("clay", 0, "ore", 0, "wheat", 0, "wood", 0, "wool", 0));
         this.developmentCards = new ArrayList<>();
         this.roads = new ArrayList<>();
         this.buildings = new ArrayList<>();
@@ -35,6 +35,23 @@ public class Player {
 
     public List<Road> getRoads() {
         return this.roads;
+    }
+
+
+    public Map<String, Integer> getResources() {
+        return this.resources;
+    }
+
+    
+    public List<DevelopmentCard> getDevelopmentCards() {
+        return this.developmentCards;
+    }
+
+
+    public void addResources(Map<String, Integer> addedResources) {
+        for (var resource : addedResources.entrySet()) {
+            this.resources.put(resource.getKey(), (this.resources.get(resource.getKey()) + resource.getValue()));
+        }
     }
 
     
@@ -75,20 +92,12 @@ public class Player {
 
 
     private void buildBuilding(String type, Vertex vertex) {
-        if (type == "settlement") {
+        if (type.equals("settlement")) {
             Settlement settlement = new Settlement(this, vertex);
             buildings.add(settlement);
         } else {
             City city = new City(this, vertex);
             buildings.add(city);
-        }
-    }
-
-
-    private void useResources(Map<String, Integer> usedResources) {
-        // Replace the current values of the used resources with their updated values
-        for (var resource : usedResources.entrySet()) {
-            this.resources.put(resource.getKey(), this.resources.get(resource.getKey()) - resource.getValue());
         }
     }
 
@@ -102,5 +111,13 @@ public class Player {
         }
 
         return true;
+    }
+
+
+    private void useResources(Map<String, Integer> usedResources) {
+        // Replace the current values of the used resources with their updated values
+        for (var resource : usedResources.entrySet()) {
+            this.resources.put(resource.getKey(), this.resources.get(resource.getKey()) - resource.getValue());
+        }
     }
 }
