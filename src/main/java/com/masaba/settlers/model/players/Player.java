@@ -15,7 +15,9 @@ public class Player {
     private List<Road> roads;
     private List<Building> buildings;
     private Integer score;
-
+    private Integer unusedCities;
+    private Integer unusedSettlements;
+    private Integer unusedRoads;
 
     public Player(String name, String colour) {
         this.name = name;
@@ -25,35 +27,32 @@ public class Player {
         this.roads = new ArrayList<>();
         this.buildings = new ArrayList<>();
         this.score = 0;
+        this.unusedCities = 4;
+        this.unusedSettlements = 5;
+        this.unusedRoads = 15;
     }
-
 
     public List<Building> getBuildings() {
         return this.buildings;
     }
 
-
     public List<Road> getRoads() {
         return this.roads;
     }
-
 
     public Map<String, Integer> getResources() {
         return this.resources;
     }
 
-    
     public List<DevelopmentCard> getDevelopmentCards() {
         return this.developmentCards;
     }
-
 
     public void addResources(Map<String, Integer> addedResources) {
         for (var resource : addedResources.entrySet()) {
             this.resources.put(resource.getKey(), (this.resources.get(resource.getKey()) + resource.getValue()));
         }
     }
-
     
     public void addSettlement(Vertex vertex) {
         Map<String, Integer> requiredResources = Map.of("clay", 1, "wheat", 1, "wood", 1, "wool", 1);
@@ -61,9 +60,10 @@ public class Player {
         if (haveSufficientResources(requiredResources)) {
             useResources(requiredResources);
             buildBuilding("settlement", vertex);
+            this.score = this.score++;
+            this.unusedSettlements = this.unusedSettlements--;
         }
     }
-
 
     public void addCity(Vertex vertex) {
         Map<String, Integer> requiredResources = Map.of("wheat", 2, "ore", 3);
@@ -71,38 +71,46 @@ public class Player {
         if (haveSufficientResources(requiredResources)) {
             useResources(requiredResources);
             buildBuilding("city", vertex);
+            this.score = this.score++;
+            this.unusedCities = this.unusedCities--;
+            this.unusedSettlements = this.unusedSettlements++;
         }
     }
-
 
     public void addRoad(Edge edge) {
         Map<String, Integer> requiredResources = Map.of("clay", 1, "wood", 1);
 
         if (haveSufficientResources(requiredResources)) {
             useResources(requiredResources);
-            buildRoad(edge);
+            Road road = new Road(this, edge);
+            edge.setRoad(road);
+            this.roads.add(road);
+            this.unusedRoads = this.unusedRoads--;
         }
     }
 
-
-    private void buildRoad(Edge edge) {
-        Road road = new Road(this, edge);
-        this.roads.add(road);
-    }
-
+    // HELPER FUNCTIONS
 
     private void buildBuilding(String type, Vertex vertex) {
-        if (type.equals("settlement")) {
-            Settlement settlement = new Settlement(this, vertex);
-            buildings.add(settlement);
-        } else {
-            City city = new City(this, vertex);
-            buildings.add(city);
+        Building building = null;
+
+        if (type.equals("settlement") && vertex.getBuilding() == null) {
+            building = new Settlement(this, vertex);
+        } else if (type.equals("city") && vertex.getBuilding() instanceof Settlement) {
+            building = new City(this, vertex);
+        }
+
+        if (building != null) {
+            finalizeBuildingConstruction(building, vertex);
         }
     }
 
+    private void finalizeBuildingConstruction(Building building, Vertex vertex) {
+        vertex.setBuilding(building);
+        buildings.add(building);
+    }
     
-    public Boolean haveSufficientResources(Map<String, Integer> requiredResources) {
+    private Boolean haveSufficientResources(Map<String, Integer> requiredResources) {
         // Return false if number of owned resources is less than required
         for (var resource : requiredResources.entrySet()) {
             if (this.resources.get(resource.getKey()) < resource.getValue()) {
@@ -112,7 +120,6 @@ public class Player {
 
         return true;
     }
-
 
     private void useResources(Map<String, Integer> usedResources) {
         // Replace the current values of the used resources with their updated values

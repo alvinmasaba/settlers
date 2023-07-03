@@ -1,5 +1,6 @@
 package com.masaba.settlers.model.players;
 
+import com.masaba.settlers.model.Road;
 import com.masaba.settlers.model.buildings.*;
 import com.masaba.settlers.model.tile.*;
 import java.util.*;
@@ -33,6 +34,9 @@ class PlayerTest {
     @Test
     void testAddCity() {
         Vertex v = new Vertex(); // Create a new vertex instance
+        Vertex emptyVertex = new Vertex(); // Create a new vertex instance
+        Settlement s = new Settlement(player, v); // Create a new settlement
+        v.setBuilding(s); //  Place new settlement on vertex
 
         player.addCity(v);
         assertEquals(0, player.getBuildings().size()); // The player doesn't have enough resources, so nothing should be built
@@ -42,6 +46,9 @@ class PlayerTest {
         player.addCity(v);
         assertEquals(1, player.getBuildings().size()); // Now the player should have one city
         assertTrue(player.getBuildings().get(0) instanceof City); // Make sure the built building is a city
+
+        player.addCity(emptyVertex);
+        assertNull(emptyVertex.getBuilding()); 
     }
 
     @Test
@@ -55,15 +62,8 @@ class PlayerTest {
 
         player.addRoad(e);
         assertEquals(1, player.getRoads().size()); // Now the player should have one road
-    }
-
-    @Test
-    void testHaveSufficientResources() {
-        player.addResources(Map.of("clay", 1, "wheat", 1, "wood", 1, "wool", 1));
-        Map<String, Integer> sufficientResources = Map.of("clay", 1, "wheat", 1, "wood", 1, "wool", 1);
-        Map<String, Integer> insufficientResources = Map.of("clay", 3, "wheat", 1, "wood", 1, "wool", 1);
-
-        assertTrue(player.haveSufficientResources(sufficientResources));
-        assertFalse(player.haveSufficientResources(insufficientResources));
+        for (var road : player.getRoads()) {
+            assertTrue(road instanceof Road);
+        }
     }
 }
