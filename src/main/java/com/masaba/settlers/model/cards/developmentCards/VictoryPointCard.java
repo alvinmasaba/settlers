@@ -8,7 +8,6 @@ public class VictoryPointCard extends DevelopmentCard {
         super(owner, "victory");
     }
 
-
     @Override
     public void use() {
         //code

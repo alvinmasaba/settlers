@@ -6,6 +6,7 @@ import com.masaba.settlers.model.Road;
 import com.masaba.settlers.model.tile.*;
 import com.masaba.settlers.model.buildings.*;
 import com.masaba.settlers.model.cards.DevelopmentCard;
+import com.masaba.settlers.model.cards.developmentCards.VictoryPointCard;
 
 public class Player {
     private String name;
@@ -26,7 +27,7 @@ public class Player {
         this.developmentCards = new ArrayList<>();
         this.roads = new ArrayList<>();
         this.buildings = new ArrayList<>();
-        this.score = 0;
+        this.score = calculateScore();
         this.unusedCities = 4;
         this.unusedSettlements = 5;
         this.unusedRoads = 15;
@@ -89,7 +90,24 @@ public class Player {
         }
     }
 
+    
     // HELPER FUNCTIONS
+
+
+    private Integer calculateScore() {
+        Integer score = 0;
+        for (Building building : this.buildings) {
+            score += building.getValue();
+        }
+
+        for (DevelopmentCard card : this.developmentCards) {
+            if (card.getType().equals("victory")){
+                score++;
+            }
+        }
+
+        return score;
+    }
 
     private void buildBuilding(String type, Vertex vertex) {
         Building building = null;

@@ -8,9 +8,4 @@ public class Wood extends ResourceCard{
         super(owner, "wood");
     }
 
-
-    @Override
-    public void use() {
-        //code
-    }
 }

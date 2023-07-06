@@ -7,10 +7,4 @@ public class Wool extends ResourceCard{
     public Wool(Player owner) {
         super(owner, "wool");
     }
-
-
-    @Override
-    public void use() {
-        //code
-    }
 }

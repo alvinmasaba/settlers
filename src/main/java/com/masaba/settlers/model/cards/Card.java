@@ -11,11 +11,7 @@ public abstract class Card {
         this.owner = owner;
         this.type = type;
     }
-
-
-    // method that will be overridden by subclasses to use the card
-    public abstract void use();
-
+    
 
     public Player getOwner() {
         return this.owner;

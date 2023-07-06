@@ -7,10 +7,4 @@ public class Ore extends ResourceCard{
     public Ore(Player owner) {
         super(owner, "ore");
     }
-
-
-    @Override
-    public void use() {
-        //code
-    }
 }

@@ -7,10 +7,4 @@ public class Clay extends ResourceCard{
     public Clay(Player owner) {
         super(owner, "clay");
     }
-
-
-    @Override
-    public void use() {
-        //code
-    }
 }
