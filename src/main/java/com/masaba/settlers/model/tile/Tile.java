@@ -10,13 +10,16 @@ public class Tile {
     private Map<String, Edge> edges;
     private Map<String, Vertex> vertices;
     private Tile[][] board;
+    protected int number;
+    protected String resource;
 
 
-    public Tile(int row, int index, Tile[][] board) {
+    public Tile(int row, int index, String resource, Tile[][] board) {
         this.row = row;
         this.index = index;
         this.board = board;
-
+        this.resource = resource;
+        
         NeighbourFactory neighbourFactory = new NeighbourFactory(this, this.board);
         this.neighbours = neighbourFactory.findAndAddNeighbours(this.row, this.index);
 
