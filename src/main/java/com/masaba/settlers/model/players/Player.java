@@ -81,7 +81,7 @@ public class Player {
     public void addRoad(Edge edge) {
         Map<String, Integer> requiredResources = Map.of("clay", 1, "wood", 1);
 
-        if (haveSufficientResources(requiredResources)) {
+        if (edge.getRoad() == null && haveSufficientResources(requiredResources)) {
             useResources(requiredResources);
             Road road = new Road(this, edge);
             edge.setRoad(road);
