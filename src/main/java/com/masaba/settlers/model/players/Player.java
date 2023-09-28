@@ -114,7 +114,8 @@ public class Player {
 
         if (type.equals("settlement") && vertex.getBuilding() == null) {
             building = new Settlement(this, vertex);
-        } else if (type.equals("city") && vertex.getBuilding() instanceof Settlement) {
+        } else if (type.equals("city") && vertex.getBuilding() instanceof Settlement
+                    && vertex.getBuilding().getOwner() == this) {
             building = new City(this, vertex);
         }
 
