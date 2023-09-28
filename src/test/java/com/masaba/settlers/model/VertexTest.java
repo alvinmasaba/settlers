@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Map;
 
 public class VertexTest {
-    Tile[][] board = new Board().board;
+    Tile[][] board = new Board(19).board;
 
     @Test
     void testVerticesHaveTwoOrThreeEdges() {

@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Map;
 
 class TileTest {
-    Tile[][] board = new Board().board;
+    Tile[][] board = new Board(19).board;
 
     @Test
     void testGetNeighbours_UpperRowEdgeTile() {      

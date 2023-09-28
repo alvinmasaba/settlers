@@ -83,17 +83,18 @@ public class Board {
         }
     }
 
-    private Map<String, Integer> createResourceCards() {
-        if (this.size < 30) {
-            Map<String, Integer> resources = new HashMap<>(Map.of("clay", 19, "wheat", 19, "wood", 19, "wool", 19, "ore", 19));
-        } else {
-            Map<String, Integer> resources = new HashMap<>(Map.of("clay", 24, "wheat", 24, "wood", 24, "wool", 24, "ore", 24));
-        }
+    // private Map<String, Integer> createResourceCards() {
+    //     if (this.size < 30) {
+    //         Map<String, Integer> resources = new HashMap<>(Map.of("clay", 19, "wheat", 19, "wood", 19, "wool", 19, "ore", 19));
+    //     } else {
+    //         Map<String, Integer> resources = new HashMap<>(Map.of("clay", 24, "wheat", 24, "wood", 24, "wool", 24, "ore", 24));
+    //     }
 
-        Map<String, Integer> resourceCards = new HashMap<>();
+    //     Map<String, Integer> resourceCards = new HashMap<>();
         
-        for (var resource : resources.entrySet()) {
+    //     // for (var resource : resources.entrySet()) {
             
-        }
+    //     // }
     }
-}
+//}
+

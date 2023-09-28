@@ -10,7 +10,7 @@ import java.util.Map;
 
 
 public class EdgeTest {
-    Tile[][] board = new Board().board;
+    Tile[][] board = new Board(19).board;
 
     @Test
     void testEdgesMappedToTwoVertices() {
