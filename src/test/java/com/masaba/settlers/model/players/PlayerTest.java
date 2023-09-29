@@ -27,6 +27,23 @@ class PlayerTest {
         player.addResources(Map.of("clay", 1, "wheat", 1, "wood", 1, "wool", 1));
 
         player.addSettlement(v);
+        assertEquals(0, player.getBuildings().size()); // The vertex is not connected to 2 consecutive roads owned by the player 
+
+        Edge e = new Edge();
+        Edge e2 = new Edge();
+        Vertex v2 = new Vertex();
+        Road r1 = new Road(player, e);
+        Road r2 = new Road(player, e2);
+        e.setRoad(r1);
+        e2.setRoad(r2);
+        e.addVertex(v, "up");
+        e.addVertex(v2, "down");
+        e2.addVertex(v2, "up");
+        v.addEdge(e);
+        v2.addEdge(e);
+        v2.addEdge(e2);
+
+        player.addSettlement(v);
         assertEquals(1, player.getBuildings().size()); // Now the player should have one settlement
         assertTrue(player.getBuildings().get(0) instanceof Settlement); // Make sure the built building is a settlement
     }

@@ -58,11 +58,10 @@ public class Player {
     public void addSettlement(Vertex vertex) {
         Map<String, Integer> requiredResources = Map.of("clay", 1, "wheat", 1, "wood", 1, "wool", 1);
 
-        if (haveSufficientResources(requiredResources)) {
-            useResources(requiredResources);
-            buildBuilding("settlement", vertex);
-            this.score = this.score++;
-            this.unusedSettlements = this.unusedSettlements--;
+        if (canBuildBuilding(vertex, requiredResources)) {
+            buildBuilding("settlement", vertex, requiredResources);
+            this.score++;
+            this.unusedSettlements--;
         }
     }
 
@@ -70,11 +69,10 @@ public class Player {
         Map<String, Integer> requiredResources = Map.of("wheat", 2, "ore", 3);
 
         if (haveSufficientResources(requiredResources)) {
-            useResources(requiredResources);
-            buildBuilding("city", vertex);
-            this.score = this.score++;
-            this.unusedCities = this.unusedCities--;
-            this.unusedSettlements = this.unusedSettlements++;
+            buildBuilding("city", vertex, requiredResources);
+            this.score++;
+            this.unusedCities--;
+            this.unusedSettlements++;
         }
     }
 
@@ -86,7 +84,7 @@ public class Player {
             Road road = new Road(this, edge);
             edge.setRoad(road);
             this.roads.add(road);
-            this.unusedRoads = this.unusedRoads--;
+            this.unusedRoads--;
         }
     }
 
@@ -113,22 +111,23 @@ public class Player {
         return (vertex.hasTwoConsecutiveRoads(this) && haveSufficientResources(requiredResources));
     }
 
-    private void buildBuilding(String type, Vertex vertex) {
+    private void buildBuilding(String type, Vertex vertex, Map<String, Integer> requiredResources) {
         Building building = null;
 
-        if (type.equals("settlement") && vertex.getBuilding() == null) {
+        if (type.equals("settlement") && vertex.getBuilding() == null){
             building = new Settlement(this, vertex);
         } else if (type.equals("city") && vertex.getBuilding() instanceof Settlement
-                    && vertex.getBuilding().getOwner() == this) {
+                    && vertex.getBuilding().getOwner().equals(this)) {
             building = new City(this, vertex);
         }
 
         if (building != null) {
-            finalizeBuildingConstruction(building, vertex);
+            finalizeBuildingConstruction(building, vertex, requiredResources);
         }
     }
 
-    private void finalizeBuildingConstruction(Building building, Vertex vertex) {
+    private void finalizeBuildingConstruction(Building building, Vertex vertex, Map<String, Integer> requiredResources) {
+        useResources(requiredResources);
         vertex.setBuilding(building);
         buildings.add(building);
     }

@@ -62,6 +62,6 @@ public class Edge {
     public Boolean hasRoadOwnedBy(Player player) {
         Road road = this.getRoad();
         // Returns true if road is a road and is owned by player
-        return (road != null && road.getOwner() == player);
+        return (road != null && road.getOwner().equals(player));
     }
 }
