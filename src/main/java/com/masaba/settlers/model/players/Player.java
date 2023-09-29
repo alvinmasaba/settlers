@@ -109,6 +109,10 @@ public class Player {
         return score;
     }
 
+    private Boolean canBuildBuilding(Vertex vertex, Map<String, Integer> requiredResources) {
+        return (vertex.hasTwoConsecutiveRoads(this) && haveSufficientResources(requiredResources));
+    }
+
     private void buildBuilding(String type, Vertex vertex) {
         Building building = null;
 

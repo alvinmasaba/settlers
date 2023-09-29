@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.masaba.settlers.model.buildings.Building;
+import com.masaba.settlers.model.players.Player;
+import com.masaba.settlers.model.Road;
 
 public class Vertex {
     private List<Tile> neighbours;
@@ -39,4 +41,22 @@ public class Vertex {
     public List<Edge> getEdges() {
         return this.edges;
     }
+
+    public boolean hasTwoConsecutiveRoads(Player player) {
+        for (Edge edge : this.getEdges()) {
+            // If the edge has a road belonging to the player
+            if (edge.hasRoadOwnedBy(player)) {
+                // Get the opposite vertex and check its edges for roads owned by player
+                Vertex vertex2 = edge.getOtherVertex(this);
+                for (Edge adjEdge : vertex2.getEdges()) {
+                    // If the adjacent edge is not the same as the previous edge and has a road owned by the player
+                    if (!adjEdge.equals(edge) && adjEdge.hasRoadOwnedBy(player)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
 }

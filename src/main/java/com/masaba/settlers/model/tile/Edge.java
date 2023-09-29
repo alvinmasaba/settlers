@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.masaba.settlers.model.Road;
+import com.masaba.settlers.model.players.Player;
 
 public class Edge {
     private List<Tile> neighbours;
@@ -46,5 +47,21 @@ public class Edge {
         if (!this.vertices.containsKey(direction)) {
             this.vertices.put(direction, vertex);
         }
+    }
+
+    public Vertex getOtherVertex(Vertex currentVertex) {
+        for (var vertex : this.getVertices().entrySet()) {
+            if (vertex.getValue() != currentVertex) {
+                return vertex.getValue();
+            }
+        }
+
+        return null;
+    }
+
+    public Boolean hasRoadOwnedBy(Player player) {
+        Road road = this.getRoad();
+        // Returns true if road is a road and is owned by player
+        return (road != null && road.getOwner() == player);
     }
 }
